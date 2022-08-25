@@ -19,7 +19,7 @@ export default () => {
     (index, prev) => {
       if (index && !prev) return null;
       if (!index) return `/tweets`;
-      return `/tweets?lastId=${prev?.res.at(-1)?.id}`;
+      return `/tweets?lastId=${prev?.res?.at(-1)?.id}`;
     }
   );
   const { ref, inView } = useInView();
@@ -29,10 +29,10 @@ export default () => {
   }, [inView]);
 
   const parsedData = useMemo(
-    () => data?.map((item) => item.res).flat(),
+    () => (data && data[0].ok ? data?.map((item) => item?.res).flat() : []),
     [data]
   );
-
+  console.log(parsedData);
   return (
     <Layout>
       <Head>
