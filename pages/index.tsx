@@ -17,7 +17,7 @@ export type TweetType = T & {
 export default () => {
   const { data, size, setSize, mutate } = useSWRInfinite<Data<TweetType[]>>(
     (index, prev) => {
-      if (index && !prev) return null;
+      if (index && !prev?.res?.length) return null;
       if (!index) return `/tweets`;
       return `/tweets?lastId=${prev?.res?.at(-1)?.id}`;
     }
@@ -32,7 +32,7 @@ export default () => {
     () => (data && data[0].ok ? data?.map((item) => item?.res).flat() : []),
     [data]
   );
-  console.log(parsedData);
+
   return (
     <Layout>
       <Head>

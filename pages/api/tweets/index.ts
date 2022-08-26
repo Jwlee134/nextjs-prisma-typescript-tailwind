@@ -11,7 +11,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     } = req;
     const parsedId = parseInt(lastId as string);
     const tweets = await db?.tweet.findMany({
-      take: 10,
+      take: 5,
       ...(parsedId && { skip: 1, cursor: { id: parsedId } }),
       include: {
         _count: { select: { likes: true } },
