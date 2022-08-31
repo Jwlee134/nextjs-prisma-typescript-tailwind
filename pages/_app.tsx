@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: any) {
       router.pathname !== "/create-account" &&
       router.pathname !== "/log-in"
     ) {
-      if (!user) router.replace("/create-account");
+      if (user !== undefined && !user.id) router.replace("/create-account");
     }
   }, [router, user]);
 

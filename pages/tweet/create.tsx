@@ -14,7 +14,7 @@ interface Form {
   content: string;
 }
 
-export default () => {
+export default function CreateATweet() {
   const {
     register,
     handleSubmit,
@@ -39,9 +39,7 @@ export default () => {
       </Head>
       <form className="flex flex-col">
         <Input
-          name="Title"
           placeholder="Title"
-          hideLabel
           register={register("title", { required: "Title is required." })}
           errorMsg={errors.title?.message}
         />
@@ -63,4 +61,4 @@ export default () => {
       </form>
     </Layout>
   );
-};
+}

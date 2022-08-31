@@ -1,21 +1,23 @@
-import { Tweet } from "@prisma/client";
+import { Tweet as TweetType } from "@prisma/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import useSWR from "swr";
+import CommentForm from "../../components/CommentForm";
+import Comments from "../../components/Comments";
 import Layout from "../../components/Layout";
 import useMutation, { Data } from "../../lib/client/useMutation";
 import { formatCreatedAt } from "../../lib/client/utils";
 
 type Response = Data<
-  Tweet & {
+  TweetType & {
     user: { name: string };
     isLiked: boolean;
-    _count: { likes: number };
+    _count: { likes: number; comments: number };
   }
 >;
 
-export default () => {
+export default function Tweet() {
   const { query } = useRouter();
   const { data: { res } = {}, mutate } = useSWR<Response>(
     query.id ? `/tweets/${query.id}` : null
@@ -32,7 +34,10 @@ export default () => {
         res: {
           ...prev.res,
           isLiked: !isLiked,
-          _count: { likes: isLiked ? num - 1 : num + 1 },
+          _count: {
+            likes: isLiked ? num - 1 : num + 1,
+            comments: prev.res._count.comments,
+          },
         },
       };
     }, false);
@@ -83,6 +88,24 @@ export default () => {
           <span className="ml-2 text-sm text-gray-300">
             {res?._count.likes} {res?._count.likes === 1 ? "like" : "likes"}
           </span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6 text-gray-300 ml-4"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"
+            />
+          </svg>
+          <span className="ml-2 text-sm text-gray-300">
+            {res?._count.comments}{" "}
+            {res?._count.comments === 1 ? "comment" : "comments"}
+          </span>
         </div>
         {res?.createdAt && (
           <span className="text-sm">
@@ -90,6 +113,8 @@ export default () => {
           </span>
         )}
       </div>
+      <CommentForm />
+      <Comments numOfComments={res?._count.comments} />
     </Layout>
   );
-};
+}

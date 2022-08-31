@@ -9,7 +9,7 @@ interface Props extends TweetType {
   mutate: KeyedMutator<Data<TweetType[]>[]>;
 }
 
-export default ({
+export default function Tweet({
   id,
   title,
   content,
@@ -18,7 +18,7 @@ export default ({
   _count: { likes },
   isLiked,
   mutate,
-}: Props) => {
+}: Props) {
   const [trigger, { loading }] = useMutation(`/tweets/${id}/toggleLike`);
 
   const onLikeClick = async (
@@ -100,4 +100,4 @@ export default ({
       </a>
     </Link>
   );
-};
+}

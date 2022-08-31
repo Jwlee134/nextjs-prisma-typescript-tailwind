@@ -17,7 +17,7 @@ interface Form {
   apiError?: string;
 }
 
-export default () => {
+export default function Login() {
   const {
     register,
     handleSubmit,
@@ -107,4 +107,4 @@ export default () => {
       </span>
     </Layout>
   );
-};
+}

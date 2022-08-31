@@ -5,7 +5,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
 }
 
-export default ({ children, loading, ...rest }: Props) => {
+export default function Button({ children, loading, ...rest }: Props) {
   return (
     <button
       disabled={loading}
@@ -15,4 +15,4 @@ export default ({ children, loading, ...rest }: Props) => {
       {loading ? "Loading..." : children}
     </button>
   );
-};
+}

@@ -5,23 +5,21 @@ import ErrorMessage from "./ErrorMessage";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   id?: string;
-  name: string;
+  name?: string;
   register: UseFormRegisterReturn;
   errorMsg?: string;
-  hideLabel?: boolean;
 }
 
-export default ({
+export default function Input({
   id,
   name,
   register,
   errorMsg,
-  hideLabel = false,
   ...rest
-}: Props) => {
+}: Props) {
   return (
     <>
-      {!hideLabel && (
+      {name && id && (
         <label htmlFor={id} className="text-sm">
           {name}
         </label>
@@ -30,7 +28,7 @@ export default ({
         id={id}
         {...register}
         className={cls(
-          "bg-zinc-800 h-10 px-2 outline-none rounded-md mt-2 text-sm",
+          "w-full bg-zinc-800 h-10 px-2 outline-none rounded-md mt-2 text-sm",
           errorMsg ? "mb-1" : "mb-2"
         )}
         {...rest}
@@ -38,4 +36,4 @@ export default ({
       {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
     </>
   );
-};
+}

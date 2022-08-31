@@ -11,24 +11,27 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  tweets    Tweet[]
-  likes     Like[]
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String        @unique
+  password     String
+  createdAt    DateTime      @default(now())
+  tweets       Tweet[]
+  likes        Like[]
+  comments     Comment[]
+  commentLikes CommentLike[]
 }
 
 model Tweet {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   title     String
   content   String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   likes     Like[]
+  comments  Comment[]
 }
 
 model Like {
@@ -38,4 +41,28 @@ model Like {
   tweetId   Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
+}
+
+model Comment {
+  id           Int           @id @default(autoincrement())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  content      String
+  user         User          @relation(fields: [userId], references: [id])
+  userId       Int
+  tweet        Tweet         @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+  tweetId      Int
+  commentLikes CommentLike[]
+  parent       Comment?      @relation("ParentChildren", fields: [parentId], references: [id])
+  children     Comment[]     @relation("ParentChildren")
+  parentId     Int?
+}
+
+model CommentLike {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId Int
 }

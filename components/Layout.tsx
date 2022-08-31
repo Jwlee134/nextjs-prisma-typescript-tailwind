@@ -9,7 +9,7 @@ interface Props {
   title?: string;
 }
 
-export default ({ children, center, hasBackBtn, title }: Props) => {
+export default function Layout({ children, center, hasBackBtn, title }: Props) {
   const router = useRouter();
 
   return (
@@ -52,4 +52,4 @@ export default ({ children, center, hasBackBtn, title }: Props) => {
       </div>
     </div>
   );
-};
+}

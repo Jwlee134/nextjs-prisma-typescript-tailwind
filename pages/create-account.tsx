@@ -18,7 +18,7 @@ interface Form {
   apiError?: string;
 }
 
-export default () => {
+export default function CreateAccount() {
   const {
     register,
     handleSubmit,
@@ -123,4 +123,4 @@ export default () => {
       </span>
     </Layout>
   );
-};
+}

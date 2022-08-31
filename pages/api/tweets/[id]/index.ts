@@ -10,7 +10,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const tweet = await db?.tweet.findUnique({
     where: { id: parseInt(id as string) },
     include: {
-      _count: { select: { likes: true } },
+      _count: { select: { likes: true, comments: true } },
       user: { select: { name: true } },
     },
   });
@@ -18,6 +18,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     res.status(404).json({ ok: false, message: "Tweet doesn't exist." });
     return;
   }
+  const numOfReplies = (
+    await db?.comment.findMany({
+      where: { tweetId: parseInt(id as string), NOT: { parentId: null } },
+    })
+  )?.length;
+  tweet._count.comments -= numOfReplies || 0;
   const isLiked = Boolean(
     await db?.like.findFirst({
       where: { tweetId: parseInt(id as string), userId: user?.id },

@@ -14,7 +14,7 @@ export type TweetType = T & {
   isLiked: boolean;
 };
 
-export default () => {
+export default function Home() {
   const { data, size, setSize, mutate } = useSWRInfinite<Data<TweetType[]>>(
     (index, prev) => {
       if (index && !prev?.res?.length) return null;
@@ -29,7 +29,7 @@ export default () => {
   }, [inView]);
 
   const parsedData = useMemo(
-    () => (data && data[0].ok ? data?.map((item) => item?.res).flat() : []),
+    () => (data && data[0].ok ? data?.flatMap((item) => item?.res) : []),
     [data]
   );
 
@@ -51,4 +51,4 @@ export default () => {
       {data && <div ref={ref} />}
     </Layout>
   );
-};
+}
